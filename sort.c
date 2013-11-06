@@ -11,7 +11,7 @@
 
 int reverse=0;
 
-char* next_line(){
+char* read_lines(){
 	//TODO to be implemented
 	return NULL;
 }
