@@ -9,11 +9,28 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include "arraylist.h"
 #define LINE_LENGTH 1024
 
 int reverse=0;
 
 char** read_lines(){
+	int i;
+	int c=0;
+	char* cptr;
+	char** pptr=malloc(sizeof(char*)*;
+	while(c!=EOF){
+		cptr=malloc(sizeof(char)*LINE_LENGTH+1);
+		if(!cptr){
+			fprintf(stderr,"Out of memory");
+			exit(1);
+		}
+		for(i=0;i<LINE_LENGTH&&(c=getchar())!=EOF&&c!='\n';++i){
+			cptr[i]=c;
+		}
+		cptr[i]=0;
+		pptr
+	}
 	//TODO
 	//read the first 1024 characters of each line 
 	//add them into an array of strings
