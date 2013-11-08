@@ -46,9 +46,6 @@
 	prints an integer pointed to by intPtr
 */
 #include "arraylist.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 arraylist* arraylist_init(int sizeOfType, int initialCapacity){
 	//printf("SizeofType is %d\n",sizeOfType);
 	void* array=malloc(initialCapacity*sizeOfType);

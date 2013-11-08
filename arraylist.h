@@ -68,3 +68,6 @@ extern void arraylist_resize(arraylist *list);
 extern void arraylist_swap(arraylist *list, int firstIndex, int secondIndex);
 extern void arraylist_print(arraylist *list, void (*printelem)(void *));
 extern void arraylist_printInt(void* intPtr);
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>

@@ -18,7 +18,8 @@ char** read_lines(){
 	int i;
 	int c=0;
 	char* cptr;
-	char** pptr=malloc(sizeof(char*)*;
+	char** pptr;
+	arraylist* list=arraylist_init(sizeof(char*),10);
 	while(c!=EOF){
 		cptr=malloc(sizeof(char)*LINE_LENGTH+1);
 		if(!cptr){
@@ -29,13 +30,22 @@ char** read_lines(){
 			cptr[i]=c;
 		}
 		cptr[i]=0;
-		pptr
+		arraylist_addEnd(list,&cptr);
 	}
+	pptr=malloc(list->size*sizeof(char*));
+	if(!pptr){
+                fprintf(stderr,"Out of memory");
+                exit(1);
+        }
+	for(i=0;i < list->size;i++){
+		pptr[i]=arraylist_get(list,i);
+	}
+	arraylist_free(list);
+	return pptr;
 	//TODO
 	//read the first 1024 characters of each line 
 	//add them into an array of strings
 	//until seeing EOF, and then return the array
-	return NULL;
 }
 
 long mystrtol(char *start, char **rest){
