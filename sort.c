@@ -13,12 +13,12 @@
 #define LINE_LENGTH 1024
 
 int reverse=0;
-
-char** read_lines(){
+arraylist* read_lines(){
+//char** read_lines(){
 	int i;
 	int c=0;
 	char* cptr;
-	char** pptr;
+	//char** pptr;
 	arraylist* list=arraylist_init(sizeof(char*),10);
 	while(c!=EOF){
 		cptr=malloc(sizeof(char)*LINE_LENGTH+1);
@@ -32,7 +32,7 @@ char** read_lines(){
 		cptr[i]=0;
 		arraylist_addEnd(list,&cptr);
 	}
-	pptr=malloc(list->size*sizeof(char*));
+	/*pptr=malloc(list->size*sizeof(char*));
 	if(!pptr){
                 fprintf(stderr,"Out of memory");
                 exit(1);
@@ -42,6 +42,8 @@ char** read_lines(){
 	}
 	arraylist_free(list);
 	return pptr;
+	*/
+	return list;
 	//TODO
 	//read the first 1024 characters of each line 
 	//add them into an array of strings
@@ -106,7 +108,7 @@ int main(){
 	*a = 5;
 	*b = 6;
 	printf("%d", num_cmp(a,b));*/
-	char* s = malloc(sizeof(char)*5);
+/*	char* s = malloc(sizeof(char)*5);
 	char* rest;
 	long num;
 	s[0]='4';
@@ -116,5 +118,13 @@ int main(){
 	s[4]=0;
 	num=mystrtol(s,&rest);
 	printf("%ld, %s", num, rest);
-	free(s);
+	free(s);*/
+	arraylist* stringarray=read_lines();
+	char* string;
+	for(int i=0;i<stringarray->size;++i){
+		string=*(char**)arraylist_get(stringarray,i);
+		printf("%s\n",string);
+		free(string);
+	}
+	arraylist_free(stringarray);
 }
