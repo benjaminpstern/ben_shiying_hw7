@@ -13,6 +13,8 @@
 #define LINE_LENGTH 1024
 
 int reverse=0;
+int fold_case=0;
+
 arraylist* read_lines(){
 //char** read_lines(){
 	int i;
@@ -98,7 +100,7 @@ void numeric_sort(){
 	//TODO to be implemented
 }
 
-void string_sort(int case_sensitive){
+void string_sort(){
 	//TODO to be implemented
 }
 
