@@ -30,7 +30,8 @@ arraylist* read_lines(){
 			cptr[i]=c;
 		}
 		cptr[i]=0;
-		arraylist_addEnd(list,&cptr);
+		if(i!=0) arraylist_addEnd(list,&cptr);
+		else free(cptr);
 	}
 	/*pptr=malloc(list->size*sizeof(char*));
 	if(!pptr){
@@ -49,7 +50,13 @@ arraylist* read_lines(){
 	//add them into an array of strings
 	//until seeing EOF, and then return the array
 }
-
+/*
+ * returns a long that is the number at the start of the line, excluding whitespaces
+ * takes in a character pointer start, the address of a character pointer rest
+ * start is the array that contains characters of the line. It must have a null character at the end
+ * rest is the address of a character pointer to store the non-number part.
+ * this function modifies the value in memory where you store the rest of the string.
+ */
 long mystrtol(char *start, char **rest){
 	int exit=0;
 	long number=0;
@@ -87,15 +94,32 @@ long mystrtol(char *start, char **rest){
 	}
 	return number;
 }
-
 int num_cmp (const void * a, const void * b){
-	long* num1=(long*)a;
-	long* num2=(long*)b;
-	return (*num1)-(*num2);
+	char* s1;
+	char* s2;
+	//printf("%s %s",*(char**)a,*(char**)b);
+	long num1=mystrtol(*(char**)a,&s1);
+	long num2=mystrtol(*(char**)b,&s2);
+	//printf("%ld %ld",num1,num2);
+	if(num1==num2) return strcmp(s1,s2);
+	return (num1)-(num2);
 }
-
+/*
+ * sorts the lines of the input based on the number at the front
+ * prints the lines sorted.
+ */
 void numeric_sort(){
-	//TODO to be implemented
+	int (*fptr)(const void* a, const void* b);
+	fptr=num_cmp;
+	arraylist* list=read_lines();
+	char* string;
+	qsort(list->array,list->size,sizeof(char*),fptr);
+	for(int i=0;i<list->size;++i){
+		string=*(char**)arraylist_get(list,i);
+		printf("%s\n",string);
+		free(string);
+	}
+	arraylist_free(list);
 }
 
 void string_sort(int case_sensitive){
@@ -111,15 +135,18 @@ int main(){
 /*	char* s = malloc(sizeof(char)*5);
 	char* rest;
 	long num;
-	s[0]='4';
+	s[0]=' ';
 	s[1]='5';
-	s[2]='c';
-	s[3]='d';
-	s[4]=0;
+	s[2]=' ';
+	s[3]=' ';
+	s[4]=' ';
+	s[5]='d';
+	s[6]=0;
 	num=mystrtol(s,&rest);
-	printf("%ld, %s", num, rest);
-	free(s);*/
-	arraylist* stringarray=read_lines();
+	printf("%ld,%s", num, rest);
+	free(s);
+*/
+/*	arraylist* stringarray=read_lines();
 	char* string;
 	for(int i=0;i<stringarray->size;++i){
 		string=*(char**)arraylist_get(stringarray,i);
@@ -127,4 +154,8 @@ int main(){
 		free(string);
 	}
 	arraylist_free(stringarray);
+*/
+	numeric_sort();
+	//char* x;
+	//printf("%ld",mystrtol("  40  meow ",&x));
 }
