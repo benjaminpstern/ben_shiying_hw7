@@ -30,7 +30,7 @@ int main(){
 	arraylist *list=arraylist_init(sizeof(int),10);
 	arraylist *otherList;
 	int i;
-	int n=10;
+	int n=100;
 	int j;
 	int pass=1;
 	for(i=0;i<n;++i){
@@ -139,7 +139,7 @@ int main(){
 	}
 	print(8,pass);
 	arraylist_free(list);
-	list=arraylist_init(sizeof(int),n);
+	/*list=arraylist_init(sizeof(int),n);
 	for(i=0;i<n;++i){
 		arraylist_addEnd(list,(void*)&i);
 	}
@@ -159,5 +159,6 @@ int main(){
 	printList(otherList);
 	arraylist_print(list,printInt);
 	arraylist_free(list);
-	arraylist_free(otherList);
+	arraylist_free(otherList);*/
+	
 }
