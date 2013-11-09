@@ -139,13 +139,13 @@ int main(){
 	}
 	print(8,pass);
 	arraylist_free(list);
-	/*list=arraylist_init(sizeof(int),n);
+	list=arraylist_init(sizeof(int),n);
 	for(i=0;i<n;++i){
 		arraylist_addEnd(list,(void*)&i);
 	}
 	otherList=arraylist_subList(list,1,n-2);
-	printList(list);
-	printList(otherList);
+	//printList(list);
+	//printList(otherList);
 	for(i=0;i<n/2;++i){
 		arraylist_swap(list,i,n-1-i);
 		//printList(list);
@@ -156,9 +156,9 @@ int main(){
 		if(j!=n-1-i) pass=0;
 	}
 	printList(list);
-	printList(otherList);
+	//printList(otherList);
 	arraylist_print(list,printInt);
 	arraylist_free(list);
-	arraylist_free(otherList);*/
+	arraylist_free(otherList);
 	
 }

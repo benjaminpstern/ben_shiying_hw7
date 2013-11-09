@@ -40,6 +40,6 @@
 	swaps 2 elements in the arraylist.  If I have an arraylist that is [3,6,9] and I swap elements 0 and 2 then I have
 	[9,6,3]
 * void arraylist_print(arraylist *list, void (*printelem)(void *))
-	takes in a function that prints one element.
+	takes in a function that prints one element. Prints the list using this function
 * void arraylist_printInt(void* intPtr)
 	prints an integer pointed to by intPtr
