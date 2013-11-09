@@ -141,7 +141,7 @@ void string_sort(){
 	char* string;
 	qsort(list->array,list->size,sizeof(char*),fptr);
 	if(reverse){
-		for (int i=(list->size)-1;i<=0;++i){
+		for (int i=(list->size)-1;i>=0;--i){
 			string=*(char**)arraylist_get(list,i);
 			printf("%s\n",string);
 			free(string);
@@ -173,6 +173,9 @@ int main(int argc, char *argv[]){
 		else if (!strcmp(argv[i],"-h") || !strcmp(argv[i], "-?")){
 			error=1;
 			break;
+		}
+		else if (!strcmp(argv[i],"-r")){
+			reverse=1;
 		}
 		else{
 			printf("Unknown flag %s\n\n", argv[i]);
