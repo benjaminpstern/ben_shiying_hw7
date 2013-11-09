@@ -85,6 +85,7 @@ long mystrtol(char *start, char **rest){
 	return number;
 }
 /*
+ * takes two void pointers a and b, which point to character pointers
  * compares two strings a and b
  * use strcasecmp for case folding compare
  * and strcmp for regular compare
@@ -97,12 +98,12 @@ int string_cmp(const void* a, const void* b){
         return strcmp(*(const char**)a, *(const char**)b);
 }
 /*
- * takes in two parameters a and b, which are in fact character pointers
+ * takes in two parameters a and b, which point to character pointers
  * compares two numbers at the front of a and b, if any
  * if the numbers are the same, compare the rest of a and b using string_cmp and return the value of the comparison
  * otherwise, returns an integer that is the difference of the numbers in a and b
  */
-int num_cmp (const void * a, const void * b){
+int numeric_cmp (const void * a, const void * b){
 	char* s1;
 	char* s2;
 	//printf("%s %s",*(char**)a,*(char**)b);
@@ -118,7 +119,7 @@ int num_cmp (const void * a, const void * b){
  */
 void numeric_sort(){
 	int (*fptr)(const void* a, const void* b);
-	fptr=num_cmp;
+	fptr=numeric_cmp;
 	arraylist* list=read_lines();
 	char* string;
 	qsort(list->array,list->size,sizeof(char*),fptr);
