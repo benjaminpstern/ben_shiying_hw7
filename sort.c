@@ -123,10 +123,19 @@ void numeric_sort(){
 	arraylist* list=read_lines();
 	char* string;
 	qsort(list->array,list->size,sizeof(char*),fptr);
-	for(int i=0;i<(list->size);++i){
-		string=*(char**)arraylist_get(list,i);
-		printf("%s\n",string);
-		free(string);
+	if(reverse){
+                for (int i=(list->size)-1;i>=0;--i){
+                        string=*(char**)arraylist_get(list,i);
+                        printf("%s\n",string);
+                        free(string);
+                }
+        }
+	else{
+		for(int i=0;i<(list->size);++i){
+			string=*(char**)arraylist_get(list,i);
+			printf("%s\n",string);
+			free(string);
+		}
 	}
 	arraylist_free(list);
 }
