@@ -8,19 +8,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <ctype.h>
-#include "arraylist.h"
+#include "arraylist.h" //Here is an arraylist struct we made and we acquired Professor Kuperman's permission to use it
 #define LINE_LENGTH 1024
 
 int reverse=0;
 int fold_case=0;
 
+/*
+ * read through all the lines from standard input
+ * return an arraylist of the lines
+ */
 arraylist* read_lines(){
-//char** read_lines(){
 	int i;
 	int c=0;
 	char* cptr;
-	//char** pptr;
 	arraylist* list=arraylist_init(sizeof(char*),10);
 	while(c!=EOF){
 		cptr=malloc(sizeof(char)*LINE_LENGTH+1);
@@ -35,22 +38,7 @@ arraylist* read_lines(){
 		if(i!=0) arraylist_addEnd(list,&cptr);
 		else free(cptr);
 	}
-	/*pptr=malloc(list->size*sizeof(char*));
-	if(!pptr){
-                fprintf(stderr,"Out of memory");
-                exit(1);
-        }
-	for(i=0;i < list->size;i++){
-		pptr[i]=arraylist_get(list,i);
-	}
-	arraylist_free(list);
-	return pptr;
-	*/
 	return list;
-	//TODO
-	//read the first 1024 characters of each line 
-	//add them into an array of strings
-	//until seeing EOF, and then return the array
 }
 /*
  * returns a long that is the number at the start of the line, excluding whitespaces
@@ -96,6 +84,24 @@ long mystrtol(char *start, char **rest){
 	}
 	return number;
 }
+/*
+ * compares two strings a and b
+ * use strcasecmp for case folding compare
+ * and strcmp for regular compare
+ * returns an integer. if return value is 0, the strings equal; if negative, a is less than b; otherwise a is bigger than b
+ */
+int string_cmp(const void* a, const void* b){
+        if (fold_case){
+                return strcasecmp(*(const char**)a,*(const char**)b);
+        }
+        return strcmp(*(const char**)a, *(const char**)b);
+}
+/*
+ * takes in two parameters a and b, which are in fact character pointers
+ * compares two numbers at the front of a and b, if any
+ * if the numbers are the same, compare the rest of a and b using string_cmp and return the value of the comparison
+ * otherwise, returns an integer that is the difference of the numbers in a and b
+ */
 int num_cmp (const void * a, const void * b){
 	char* s1;
 	char* s2;
@@ -103,7 +109,7 @@ int num_cmp (const void * a, const void * b){
 	long num1=mystrtol(*(char**)a,&s1);
 	long num2=mystrtol(*(char**)b,&s2);
 	//printf("%ld %ld",num1,num2);
-	if(num1==num2) return strcmp(s1,s2);
+	if(num1==num2) return string_cmp(&s1,&s2);
 	return (num1)-(num2);
 }
 /*
@@ -116,48 +122,76 @@ void numeric_sort(){
 	arraylist* list=read_lines();
 	char* string;
 	qsort(list->array,list->size,sizeof(char*),fptr);
-	for(int i=0;i<list->size;++i){
+	for(int i=0;i<(list->size);++i){
 		string=*(char**)arraylist_get(list,i);
 		printf("%s\n",string);
 		free(string);
 	}
 	arraylist_free(list);
 }
-
+/*
+ * sorts the lines using ascii values
+ * prints the lines sorted.
+ */
 void string_sort(){
-	//TODO to be implemented
-}
-
-int main(){
-  /*	long* a=malloc(sizeof(long));
-	long* b=malloc(sizeof(long));
-	*a = 5;
-	*b = 6;
-	printf("%d", num_cmp(a,b));*/
-/*	char* s = malloc(sizeof(char)*5);
-	char* rest;
-	long num;
-	s[0]=' ';
-	s[1]='5';
-	s[2]=' ';
-	s[3]=' ';
-	s[4]=' ';
-	s[5]='d';
-	s[6]=0;
-	num=mystrtol(s,&rest);
-	printf("%ld,%s", num, rest);
-	free(s);
-*/
-/*	arraylist* stringarray=read_lines();
+	int (*fptr)(const void *a, const void* b);
+	fptr=string_cmp;
+	arraylist* list=read_lines();
 	char* string;
-	for(int i=0;i<stringarray->size;++i){
-		string=*(char**)arraylist_get(stringarray,i);
-		printf("%s\n",string);
-		free(string);
+	qsort(list->array,list->size,sizeof(char*),fptr);
+	if(reverse){
+		for (int i=(list->size)-1;i<=0;++i){
+			string=*(char**)arraylist_get(list,i);
+			printf("%s\n",string);
+			free(string);
+		}
 	}
-	arraylist_free(stringarray);
-*/
-	numeric_sort();
-	//char* x;
-	//printf("%ld",mystrtol("  40  meow ",&x));
+	else{
+		for(int i=0;i<(list->size);++i){
+                string=*(char**)arraylist_get(list,i);
+                printf("%s\n",string);
+                free(string);
+	        }
+	}
+	arraylist_free(list);
+}
+/*
+ * The main function takes care of flags and calls different sorting functions based on the flags
+ */
+int main(int argc, char *argv[]){
+	int number_sort=0;
+	int i;
+	int error=0;
+	for (i=1;i<argc;i++){
+		if (!strcmp(argv[i],"-f")){
+			fold_case=1;
+		}
+		else if (!strcmp(argv[i],"-n")){
+			number_sort=1;
+		}
+		else if (!strcmp(argv[i],"-h") || !strcmp(argv[i], "-?")){
+			error=1;
+			break;
+		}
+		else{
+			printf("Unknown flag %s\n\n", argv[i]);
+			error=1;
+			break;
+		}
+	}
+	if(error){
+		printf("Usage %s [-f] [-n]\n\n", argv[0]);
+		printf("Sort lines\n\n");
+		printf("	-f      Case insensitive sort\n");
+		printf("	-n      Sort based on the numeric value at the front of the line\n");
+		printf("	-h/-?   This message\n\n");
+	}
+	else{
+		if (number_sort){
+			numeric_sort();
+		}
+		else{
+			string_sort();
+		}
+	}
 }
