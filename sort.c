@@ -15,7 +15,6 @@
 
 int reverse=0;
 int fold_case=0;
-
 /*
  * read through all the lines from standard input
  * return an arraylist of the lines
@@ -114,12 +113,10 @@ int numeric_cmp (const void * a, const void * b){
 	return (num1)-(num2);
 }
 /*
- * sorts the lines of the input based on the number at the front
+ * sorts the lines of the input using the comparator passed into the function
  * prints the lines sorted.
  */
-void numeric_sort(){
-	int (*fptr)(const void* a, const void* b);
-	fptr=numeric_cmp;
+void sort(int (*fptr)(const void *a, const void* b)){
 	arraylist* list=read_lines();
 	char* string;
 	qsort(list->array,list->size,sizeof(char*),fptr);
@@ -140,35 +137,10 @@ void numeric_sort(){
 	arraylist_free(list);
 }
 /*
- * sorts the lines using ascii values
- * prints the lines sorted.
- */
-void string_sort(){
-	int (*fptr)(const void *a, const void* b);
-	fptr=string_cmp;
-	arraylist* list=read_lines();
-	char* string;
-	qsort(list->array,list->size,sizeof(char*),fptr);
-	if(reverse){
-		for (int i=(list->size)-1;i>=0;--i){
-			string=*(char**)arraylist_get(list,i);
-			printf("%s\n",string);
-			free(string);
-		}
-	}
-	else{
-		for(int i=0;i<(list->size);++i){
-                string=*(char**)arraylist_get(list,i);
-                printf("%s\n",string);
-                free(string);
-	        }
-	}
-	arraylist_free(list);
-}
-/*
  * The main function takes care of flags and calls different sorting functions based on the flags
  */
 int main(int argc, char *argv[]){
+	int (*fptr)(const void* a, const void* b);
 	int number_sort=0;
 	int i;
 	int error=0;
@@ -201,10 +173,11 @@ int main(int argc, char *argv[]){
 	}
 	else{
 		if (number_sort){
-			numeric_sort();
+			fptr=numeric_cmp;
 		}
 		else{
-			string_sort();
+			fptr=string_cmp;
 		}
+		sort(fptr);
 	}
 }
