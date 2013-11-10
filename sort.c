@@ -73,7 +73,7 @@ long mystrtol(char *start, char **rest){
 	while(!exit){
 		if (!isdigit(begin[counter])){
 			exit=1;
-			*rest=&start[counter];
+			if (rest!=NULL)	*rest=&start[counter];
 			number=number*sign;
 		}
 		else{
