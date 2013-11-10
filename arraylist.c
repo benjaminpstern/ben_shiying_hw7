@@ -1,5 +1,6 @@
 /*
 * an Arraylist.
+* Authors Ben Stern and Shiying Zheng
 * functions:
 * arraylist arraylist_init(int sizeOfType, int initialCapacity)
 	this creates an arraylist that stores anything with size sizeOfType
@@ -46,6 +47,11 @@
 	prints an integer pointed to by intPtr
 */
 #include "arraylist.h"
+/*
+ * Takes the size of the item to store, and the initial capacity
+ * creates the arraylist, returns a pointer to it.
+ * its space is malloc'd and should be freed with arraylist_free later
+ */
 arraylist* arraylist_init(int sizeOfType, int initialCapacity){
 	//printf("SizeofType is %d\n",sizeOfType);
 	void* array=malloc(initialCapacity*sizeOfType);
@@ -57,9 +63,18 @@ arraylist* arraylist_init(int sizeOfType, int initialCapacity){
 	//printf("element_size is %d\n",list->element_size);
 	return list;
 }
+/*
+ * adds a copy of the item pointed to by itemPtr to the end of list
+ * constant time average
+ */
 void arraylist_addEnd(arraylist *list, void* itemPtr){
 	arraylist_add(list,list->size,itemPtr);
 }
+/*
+ * adds a copy of the item at itemPtr to the list at position index
+ * Adding to the end takes constant time
+ * Adding to the beginning takes linear time
+ */
 void arraylist_add(arraylist *list,int index, void* itemPtr){
 	if(index>list->size||index<0) 
 		fprintf(stderr,"your index is out of bounds. size:%d index %d\n",list->size,index);
@@ -72,9 +87,19 @@ void arraylist_add(arraylist *list,int index, void* itemPtr){
 	memcpy(position, itemPtr, elem_size);
 	++list->size;
 }
+/*
+ * removes the item at the end and returns a pointer to it.
+ * the pointer is malloc'd and should be freed.
+ * removing from the end takes constant time.
+ */
 void* arraylist_removeEnd(arraylist *list){
 	return arraylist_remove(list,list->size-1);
 }
+/* removes the item at the specified index and returns a pointer to it.
+ * the pointer is malloc'd and should be freed.
+ * removing from the beginning takes linear time
+ * removing from the end takes constant time.
+ */
 void* arraylist_remove(arraylist *list, int index){
 	if(index>list->size||index<0) 
 		fprintf(stderr,"your index is out of bounds. size:%d index %d\n",list->size,index);
@@ -86,11 +111,20 @@ void* arraylist_remove(arraylist *list, int index){
 	--list->size;
 	return element;
 }
+/*
+ * returns the location of the specified index. Always constant time.
+ * This item is the item in the arraylist, not a copy.
+ */
 void* arraylist_get(arraylist *list, int index){
 	if(index>=list->size||index<0) 
 		fprintf(stderr,"your index is out of bounds. size:%d index %d\n",list->size,index);
 	return list->array+index*list->element_size;
 }
+/*
+ * Sets the specified index to contain the item pointed to by itemPtr
+ * returns a malloc'd pointer to what was previously in that space
+ * this item should be freed at some point
+ */
 void* arraylist_set(arraylist *list, int index, void* itemPtr){
 	if(index>=list->size||index<0) 
 		fprintf(stderr,"your index is out of bounds. size:%d index %d\n",list->size,index);
@@ -103,19 +137,37 @@ void* arraylist_set(arraylist *list, int index, void* itemPtr){
 	memcpy(position, itemPtr, list->element_size);
 	return object;
 }
+/*
+ * frees the array in the arraylist. However, does not free
+ * other things that have been malloc'd by other functions like remove and set
+ */
 void arraylist_free(arraylist *list){
 	free(list->array);
 	free(list);
 }
+/*
+ * returns the number of elements in the list
+ */
 int arraylist_size(arraylist *list){
 	return list->size;
 }
+/*
+ * returns 1 if the list is empty, 0 if the list is not
+ */
 int arraylist_isEmpty(arraylist *list){
 	return list->size==0;
 }
+/*
+ * makes the list size 0. Keeps the same capacity.
+ */
 void arraylist_clear(arraylist *list){
 	list->size=0;
 }
+/*
+ * returns a pointer to another arraylist that is the sublist
+ * from the start index to the end index, inclusive.
+ * as this is also an arraylist it should be freed with arraylist_free
+ */
 arraylist* arraylist_subList(arraylist *list, int startIndex, int endIndex){
 	int i;
 	if(startIndex>=list->size||startIndex<0||endIndex>=list->size||endIndex<0||endIndex<startIndex) 
@@ -127,12 +179,18 @@ arraylist* arraylist_subList(arraylist *list, int startIndex, int endIndex){
 	}
 	return sublist;
 }
+/*
+ * swaps two elements in the list. constant time.
+ */
 void arraylist_swap(arraylist *list, int firstIndex, int secondIndex){
 	void* a=arraylist_set(list,firstIndex,arraylist_get(list,secondIndex));
 	void* b=arraylist_set(list,secondIndex,a);
 	free(a);
 	free(b);
 }
+/*
+ * a "private" method. Don't use this outside of this file
+ */
 void arraylist_resize(arraylist *list){
 	void *sparePointer=list->array;
 	list->capacity*=2;
@@ -142,6 +200,10 @@ void arraylist_resize(arraylist *list){
 	memcpy(list->array, sparePointer, list->size*list->element_size);
 	free(sparePointer);
 }
+/*
+ * Takes a function pointer to print one element,
+ * and prints the list using that function
+ */
 void arraylist_print(arraylist *list, void (*printelem)(void *)){
 	int i;
 	printf("[");
@@ -151,10 +213,11 @@ void arraylist_print(arraylist *list, void (*printelem)(void *)){
 	}
 	printf("]\n");
 }
+/*
+ * if the arraylist is full of ints, this prints the arraylist.
+ * otherwise it prints a bunch of nonsense.
+ */
 void arraylist_printInt(void* i){
 	int j=*((int*)i);
 	printf("%d",j);
 }
-		
-
-	

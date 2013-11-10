@@ -1,6 +1,7 @@
 Shiying Zheng and Ben Stern
 Hw7 CSCI 241
 
+arraylist.c is an arraylist that we made to do this lab
 sort.c sorts lines of standard input
 
 estimated time: 6 hours

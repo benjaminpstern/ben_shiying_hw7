@@ -1,5 +1,6 @@
 /*
 * an Arraylist.
+Authors Ben Stern and Shiying Zheng
 * functions:
 * arraylist arraylist_init(int sizeOfType, int initialCapacity)
 	this creates an arraylist that stores anything with size sizeOfType
